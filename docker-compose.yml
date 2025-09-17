@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: sentinel
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  sentinel-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://sentinel:sentinel123@postgres:5432/sentinel
+      RUST_LOG: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./sentinel-server/config.toml:/app/config.toml
+
+  sentinel-ui:
+    build:
+      context: ./sentinel-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - sentinel-server
+
+volumes:
+  postgres_data:

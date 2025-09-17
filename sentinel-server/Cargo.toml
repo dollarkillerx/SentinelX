@@ -1,0 +1,37 @@
+[package]
+name = "sentinel-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sentinel-common = { path = "../sentinel-common" }
+tokio = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+
+# Database
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "migrate", "chrono", "derive"] }
+sea-orm = { version = "1.1", features = ["sqlx-postgres", "runtime-tokio", "with-chrono"] }
+
+# JSON-RPC
+jsonrpsee = { version = "0.24", features = ["server", "macros"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+
+# Scheduling & caching
+tokio-cron-scheduler = "0.13"
+dashmap = "6.1"
+moka = { version = "0.12", features = ["future"] }
+
+# Config
+config = { workspace = true }
+clap = { version = "4.5", features = ["derive"] }
+chrono = "0.4"
+
+# Auth
+jsonwebtoken = "9.3"
+uuid = { version = "1.11", features = ["v4", "serde"] }

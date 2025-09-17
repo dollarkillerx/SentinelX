@@ -1,0 +1,32 @@
+[client]
+# Client ID (auto-generated if empty)
+id = ""
+# Hostname (auto-detected if empty)
+hostname = ""
+
+[server]
+url = "http://localhost:8080"
+token = ""
+heartbeat_interval = 30
+
+[proxy]
+listen_addr = "0.0.0.0:8888"
+target_addr = "127.0.0.1:8080"
+buffer_size = 8192
+
+[transport]
+type = "direct"
+encryption_key = ""
+
+[limits]
+max_connections = 1000
+rate_limit_mbps = 0
+
+[monitoring]
+enabled = true
+report_interval = 30
+collect_interval = 1
+
+[logging]
+level = "info"
+file = "/var/log/sentinel-client.log"

@@ -1,0 +1,24 @@
+FROM rust:1.83 as builder
+
+WORKDIR /app
+
+COPY Cargo.toml Cargo.lock ./
+COPY sentinel-common ./sentinel-common
+COPY sentinel-server ./sentinel-server
+
+RUN cargo build --release --bin sentinel-server
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libssl3 \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app/target/release/sentinel-server /usr/local/bin/
+COPY sentinel-server/config.toml /etc/sentinel/config.toml
+
+EXPOSE 8080
+
+CMD ["sentinel-server", "--config", "/etc/sentinel/config.toml"]
