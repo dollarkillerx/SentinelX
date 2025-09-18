@@ -6,14 +6,17 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio_tungstenite::{accept_async, connect_async, tungstenite::Message};
 use tracing;
 
+#[allow(dead_code)]
 pub struct WebSocketTransport;
 
 impl WebSocketTransport {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self
     }
 
     /// Create a WebSocket server that listens for connections
+    #[allow(dead_code)]
     pub async fn listen(&self, addr: SocketAddr) -> Result<WebSocketListener> {
         let listener = TcpListener::bind(addr).await?;
         tracing::info!("WebSocket server listening on {}", addr);
@@ -22,6 +25,7 @@ impl WebSocketTransport {
     }
 
     /// Connect to a WebSocket server
+    #[allow(dead_code)]
     pub async fn connect(&self, url: &str) -> Result<()> {
         let ws_url = if url.starts_with("ws://") || url.starts_with("wss://") {
             url.to_string()
@@ -43,11 +47,13 @@ impl WebSocketTransport {
     }
 }
 
+#[allow(dead_code)]
 pub struct WebSocketListener {
     listener: TcpListener,
 }
 
 impl WebSocketListener {
+    #[allow(dead_code)]
     pub async fn accept(&self) -> Result<(SocketAddr,)> {
         let (tcp_stream, addr) = self.listener.accept().await?;
 
@@ -66,14 +72,17 @@ impl WebSocketListener {
 }
 
 /// WebSocket relay that forwards data between connections
+#[allow(dead_code)]
 pub struct WebSocketRelay;
 
 impl WebSocketRelay {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self
     }
 
     /// Create a simple WebSocket echo server for testing
+    #[allow(dead_code)]
     pub async fn echo_server(&self, addr: SocketAddr) -> Result<()> {
         let listener = TcpListener::bind(addr).await?;
         tracing::info!("WebSocket echo server listening on {}", addr);
@@ -98,6 +107,7 @@ impl WebSocketRelay {
         Ok(())
     }
 
+    #[allow(dead_code)]
     async fn handle_echo_connection(
         mut ws_stream: tokio_tungstenite::WebSocketStream<TcpStream>,
     ) -> Result<()> {
@@ -141,6 +151,7 @@ impl WebSocketRelay {
     }
 
     /// Relay data between a WebSocket and a TCP stream
+    #[allow(dead_code)]
     pub async fn relay_ws_to_tcp(ws_url: &str, tcp_addr: SocketAddr) -> Result<()> {
         tracing::info!(
             "Setting up WebSocket-TCP relay: {} <-> {}",

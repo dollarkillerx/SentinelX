@@ -1,9 +1,9 @@
 use anyhow::Result;
 use jsonrpsee::server::RpcModule;
-use jsonrpsee::types::{ErrorCode, ErrorObject, ErrorObjectOwned};
+use jsonrpsee::types::{ErrorCode, ErrorObjectOwned};
 use sentinel_common::{
-    ClientInfo, HeartbeatRequest, HeartbeatResponse, MetricsSummary, RegisterRequest,
-    RegisterResponse, SystemMetrics, Task, RelayConfig, TaskType, IptablesRule,
+    HeartbeatRequest, HeartbeatResponse, MetricsSummary, RegisterRequest,
+    RegisterResponse, RelayConfig, IptablesRule,
 };
 use std::sync::Arc;
 
@@ -64,6 +64,7 @@ pub async fn create_rpc_module(manager: Arc<ClientManager>) -> Result<RpcModule<
         #[derive(serde::Deserialize)]
         struct StartRelayRequest {
             entry_client_id: String,
+            #[allow(dead_code)]
             exit_client_id: String,
             entry_point: String,
             exit_point: String,

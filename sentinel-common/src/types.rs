@@ -1,22 +1,37 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+/// Client information structure containing identification and capability details
+/// Used during client registration and heartbeat communications
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClientInfo {
+    /// Unique client identifier (UUID)
     pub id: String,
+    /// Client hostname for identification
     pub hostname: String,
+    /// Client IP address
     pub ip: String,
+    /// Client software version
     pub version: String,
+    /// List of client capabilities (proxy, iptables, relay, monitoring)
     pub capabilities: Vec<String>,
+    /// Static system information collected at startup
     pub system_info: SystemInfo,
 }
 
+/// Static system information collected once during client startup
+/// Contains hardware and OS details that don't change frequently
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SystemInfo {
+    /// Operating system name and version
     pub os: String,
+    /// Kernel version string
     pub kernel_version: String,
+    /// Number of CPU cores available
     pub cpu_cores: usize,
+    /// Total system memory in bytes
     pub total_memory: u64,
+    /// Total disk space in bytes
     pub total_disk: u64,
 }
 

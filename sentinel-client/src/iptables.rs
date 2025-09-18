@@ -99,6 +99,7 @@ impl IptablesManager {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn list_rules(&self, chain: &str) -> Result<Vec<String>> {
         tracing::info!("Listing iptables rules for chain: {}", chain);
 
@@ -120,6 +121,7 @@ impl IptablesManager {
             .collect())
     }
 
+    #[allow(dead_code)]
     pub async fn save_rules(&self) -> Result<String> {
         tracing::info!("Saving iptables rules");
 
@@ -135,6 +137,7 @@ impl IptablesManager {
         Ok(String::from_utf8_lossy(&output.stdout).to_string())
     }
 
+    #[allow(dead_code)]
     pub async fn restore_rules(&self, rules: &str) -> Result<()> {
         tracing::info!("Restoring iptables rules");
 
@@ -169,11 +172,13 @@ impl IptablesManager {
     }
 
     /// Get list of applied rules for monitoring/debugging
+    #[allow(dead_code)]
     pub async fn get_applied_rules(&self) -> Vec<String> {
         self.applied_rules.lock().await.clone()
     }
 
     /// Clear applied rules history
+    #[allow(dead_code)]
     pub async fn clear_applied_rules_history(&self) {
         self.applied_rules.lock().await.clear();
     }

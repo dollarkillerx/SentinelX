@@ -9,6 +9,7 @@ pub struct StatsCollector {
     connection_details: RwLock<HashMap<String, ConnectionStats>>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ConnectionStats {
     pub bytes_sent: u64,
@@ -51,11 +52,13 @@ impl StatsCollector {
         details.insert(peer, ConnectionStats::new());
     }
 
+    #[allow(dead_code)]
     pub fn close_connection(&self, peer: &str) {
         let mut details = self.connection_details.write();
         details.remove(peer);
     }
 
+    #[allow(dead_code)]
     pub fn get_stats(&self) -> Stats {
         Stats {
             bytes_sent: self.bytes_sent.load(Ordering::Relaxed),
@@ -66,6 +69,7 @@ impl StatsCollector {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Stats {
     pub bytes_sent: u64,

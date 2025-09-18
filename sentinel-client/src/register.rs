@@ -13,6 +13,7 @@ use crate::monitor::SystemMonitor;
 
 pub struct RegistrationManager {
     client_info: ClientInfo,
+    #[allow(dead_code)]
     server_url: String,
     heartbeat_interval: Duration,
     token: Arc<RwLock<Option<String>>>,

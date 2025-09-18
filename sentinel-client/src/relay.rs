@@ -1,9 +1,7 @@
 use anyhow::Result;
-use jsonrpsee::core::client::ClientT;
 use jsonrpsee::http_client::{HttpClient, HttpClientBuilder};
 use sentinel_common::{RelayConfig, TransportType};
-use crate::encryption::{EncryptionManager, EncryptionConfig, EncryptionType};
-use crate::websocket::{WebSocketTransport, WebSocketRelay};
+use crate::encryption::EncryptionManager;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -13,7 +11,9 @@ use tokio::sync::RwLock;
 use tracing;
 
 pub struct RelayManager {
+    #[allow(dead_code)]
     server_url: String,
+    #[allow(dead_code)]
     client: HttpClient,
     active_relays: Arc<RwLock<HashMap<String, RelayConnection>>>,
     encryption_manager: EncryptionManager,
@@ -75,6 +75,7 @@ impl RelayManager {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn list_active_relays(&self) -> Vec<String> {
         self.active_relays.read().await.keys().cloned().collect()
     }
@@ -83,11 +84,12 @@ impl RelayManager {
 pub struct RelayConnection {
     config: RelayConfig,
     listener: Option<TcpListener>,
+    #[allow(dead_code)]
     encryption_manager: EncryptionManager,
 }
 
 impl RelayConnection {
-    pub async fn new(config: RelayConfig, encryption_manager: &EncryptionManager) -> Result<Self> {
+    pub async fn new(config: RelayConfig, _encryption_manager: &EncryptionManager) -> Result<Self> {
         // Parse entry point to start listening
         let listener = if config.entry_point.starts_with("0.0.0.0:") || config.entry_point.starts_with("127.0.0.1:") {
             let addr: SocketAddr = config.entry_point.parse()?;

@@ -24,6 +24,7 @@ impl ProxyServer {
         }
     }
 
+    #[allow(dead_code)]
     pub fn with_rate_limit(mut self, mbps: u32) -> Self {
         if mbps > 0 {
             self.limiter = Some(Arc::new(RateLimiter::new(mbps * 1024 * 1024 / 8)));

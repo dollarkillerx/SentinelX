@@ -163,7 +163,9 @@ impl SystemMonitor {
 }
 
 pub struct MetricsReporter {
+    #[allow(dead_code)]
     monitor: Arc<SystemMonitor>,
+    #[allow(dead_code)]
     server_url: String,
     interval: Duration,
 }

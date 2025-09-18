@@ -200,6 +200,7 @@ impl Database {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn get_latest_metrics(&self, client_id: &str) -> Result<Option<SystemMetrics>> {
         #[derive(sqlx::FromRow)]
         struct MetricsRow {

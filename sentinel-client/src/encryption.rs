@@ -3,11 +3,12 @@ use aes_gcm::{Aes256Gcm, KeyInit, Nonce, aead::{Aead, OsRng}};
 use chacha20poly1305::{ChaCha20Poly1305, Key as ChaChaKey};
 use rand::RngCore;
 use std::sync::Arc;
-use tokio::io::{AsyncRead, AsyncWrite, AsyncReadExt, AsyncWriteExt};
+use tokio::io::{AsyncRead, AsyncWrite};
 use tokio::net::TcpStream;
-use tokio_rustls::{TlsConnector, TlsAcceptor, client::TlsStream as ClientTlsStream, server::TlsStream as ServerTlsStream};
-use rustls::{ClientConfig, ServerConfig};
+use tokio_rustls::TlsConnector;
+use rustls::ClientConfig;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum EncryptionType {
     None,
@@ -16,6 +17,7 @@ pub enum EncryptionType {
     Tls,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct EncryptionConfig {
     pub encryption_type: EncryptionType,
@@ -23,6 +25,7 @@ pub struct EncryptionConfig {
     pub tls_config: Option<TlsConfig>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct TlsConfig {
     pub ca_cert: Option<Vec<u8>>,
@@ -33,10 +36,12 @@ pub struct TlsConfig {
     pub verify_hostname: bool,
 }
 
+#[allow(dead_code)]
 pub struct EncryptedStream {
     inner: Box<dyn EncryptedStreamTrait>,
 }
 
+#[allow(dead_code)]
 trait EncryptedStreamTrait: AsyncRead + AsyncWrite + Send + Unpin {}
 
 impl<T: AsyncRead + AsyncWrite + Send + Unpin> EncryptedStreamTrait for T {}
@@ -75,6 +80,7 @@ impl AsyncWrite for EncryptedStream {
     }
 }
 
+#[allow(dead_code)]
 pub struct SymmetricEncryptedStream<T> {
     inner: T,
     cipher: SymmetricCipher,
@@ -82,12 +88,14 @@ pub struct SymmetricEncryptedStream<T> {
     write_buffer: Vec<u8>,
 }
 
+#[allow(dead_code)]
 enum SymmetricCipher {
     Aes256Gcm(Aes256Gcm),
     ChaCha20Poly1305(ChaCha20Poly1305),
 }
 
 impl<T: AsyncRead + AsyncWrite + Unpin> SymmetricEncryptedStream<T> {
+    #[allow(dead_code)]
     pub fn new_aes256(stream: T, key: &[u8]) -> Result<Self> {
         if key.len() != 32 {
             anyhow::bail!("AES-256-GCM requires a 32-byte key");
@@ -104,6 +112,7 @@ impl<T: AsyncRead + AsyncWrite + Unpin> SymmetricEncryptedStream<T> {
         })
     }
 
+    #[allow(dead_code)]
     pub fn new_chacha20(stream: T, key: &[u8]) -> Result<Self> {
         if key.len() != 32 {
             anyhow::bail!("ChaCha20Poly1305 requires a 32-byte key");
@@ -120,6 +129,7 @@ impl<T: AsyncRead + AsyncWrite + Unpin> SymmetricEncryptedStream<T> {
         })
     }
 
+    #[allow(dead_code)]
     fn encrypt_data(&self, plaintext: &[u8]) -> Result<Vec<u8>> {
         let mut nonce_bytes = [0u8; 12];
         OsRng.fill_bytes(&mut nonce_bytes);
@@ -143,6 +153,7 @@ impl<T: AsyncRead + AsyncWrite + Unpin> SymmetricEncryptedStream<T> {
         Ok(result)
     }
 
+    #[allow(dead_code)]
     fn decrypt_data(&self, encrypted_data: &[u8]) -> Result<Vec<u8>> {
         if encrypted_data.len() < 12 {
             anyhow::bail!("Encrypted data too short");
@@ -249,6 +260,7 @@ impl EncryptionManager {
         Self
     }
 
+    #[allow(dead_code)]
     pub async fn wrap_stream(&self, stream: TcpStream, config: EncryptionConfig) -> Result<EncryptedStream> {
         match config.encryption_type {
             EncryptionType::None => {
@@ -276,6 +288,7 @@ impl EncryptionManager {
         }
     }
 
+    #[allow(dead_code)]
     async fn wrap_with_tls(&self, stream: TcpStream, tls_config: Option<TlsConfig>) -> Result<EncryptedStream> {
         let tls_config = tls_config.ok_or_else(|| anyhow::anyhow!("TLS config required"))?;
 
@@ -312,6 +325,7 @@ impl EncryptionManager {
         })
     }
 
+    #[allow(dead_code)]
     pub fn generate_key() -> Vec<u8> {
         let mut key = vec![0u8; 32];
         OsRng.fill_bytes(&mut key);

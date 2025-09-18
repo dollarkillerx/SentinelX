@@ -18,6 +18,7 @@ pub struct ClientState {
     pub status: ClientStatus,
     pub last_heartbeat: DateTime<Utc>,
     pub metrics: Option<SystemMetrics>,
+    #[allow(dead_code)]
     pub token: String,
 }
 
