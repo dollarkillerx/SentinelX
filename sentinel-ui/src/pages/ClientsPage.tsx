@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { rpcClient, ClientInfo } from '../api/rpc-client';
+import { rpcClient, type ClientInfo } from '../api/rpc-client';
 import {
   Server, Circle, RefreshCw, Trash2, MoreVertical,
   Cpu, HardDrive, Network, ChevronDown, ChevronUp

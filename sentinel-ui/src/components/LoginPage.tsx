@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Lock, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import * as Toggle from '@radix-ui/react-toggle';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -88,17 +90,17 @@ function LoginPage() {
                   placeholder="Enter your password"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                <Toggle.Root
+                  pressed={showPassword}
+                  onPressedChange={setShowPassword}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center data-[state=on]:text-gray-300 data-[state=off]:text-gray-400 hover:text-gray-300 transition-colors"
                 >
                   {showPassword ? (
-                    <EyeOff className="w-5 h-5 text-gray-400 hover:text-gray-300" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <Eye className="w-5 h-5 text-gray-400 hover:text-gray-300" />
+                    <Eye className="w-5 h-5" />
                   )}
-                </button>
+                </Toggle.Root>
               </div>
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { rpcClient, IptablesRule } from '../api/rpc-client';
+import { rpcClient, type IptablesRule } from '../api/rpc-client';
 import {
   Shield, Plus, X, Filter, AlertTriangle,
   CheckCircle, XCircle, Globe, Wifi

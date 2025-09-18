@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { rpcClient, RelayConfig } from '../api/rpc-client';
+import { rpcClient, type RelayConfig } from '../api/rpc-client';
 import {
   Network, Plus, X, ArrowRight, Globe, Shield,
   Activity, Play, Pause, Trash2

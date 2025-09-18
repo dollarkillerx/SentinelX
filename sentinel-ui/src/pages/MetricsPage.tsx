@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { rpcClient } from '../api/rpc-client';
 import {
   BarChart3, TrendingUp, TrendingDown, Activity,
-  Cpu, HardDrive, Network, Clock, RefreshCw
+  Cpu, HardDrive, Network, Clock, RefreshCw, Users
 } from 'lucide-react';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -207,7 +207,7 @@ function MetricsPage() {
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
               >
                 {clientDistribution.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />

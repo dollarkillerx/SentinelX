@@ -2,8 +2,10 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { rpcClient } from '../api/rpc-client';
 import {
-  Users, Cpu, HardDrive, Activity, Network, Clock
+  Users, Cpu, HardDrive, Activity, Network, Clock, AlertCircle
 } from 'lucide-react';
+import * as Tabs from '@radix-ui/react-tabs';
+import * as Separator from '@radix-ui/react-separator';
 
 function Dashboard() {
   const { data: metrics, isLoading, error } = useQuery({
@@ -64,66 +66,89 @@ function Dashboard() {
       </div>
 
       {error && (
-        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6 text-red-400">
-          Error loading metrics: {error.message}
+        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6 flex items-center gap-3 text-red-400">
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <span>Error loading metrics: {error.message}</span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {statCards.map((card, idx) => (
-          <div key={idx} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-lg ${card.color}`}>
-                <card.icon className="w-6 h-6" />
+      <Tabs.Root defaultValue="overview" className="w-full">
+        <Tabs.List className="flex h-10 items-center justify-center rounded-md bg-gray-800 p-1 mb-6">
+          <Tabs.Trigger
+            value="overview"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
+          >
+            Overview
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="clients"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
+          >
+            Clients
+          </Tabs.Trigger>
+        </Tabs.List>
+
+        <Tabs.Content value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {statCards.map((card, idx) => (
+              <div key={idx} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-lg ${card.color}`}>
+                    <card.icon className="w-6 h-6" />
+                  </div>
+                  <Clock className="w-4 h-4 text-gray-500" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm mb-1">{card.title}</p>
+                  <p className="text-2xl font-bold">{card.value}</p>
+                </div>
               </div>
-              <Clock className="w-4 h-4 text-gray-500" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-1">{card.title}</p>
-              <p className="text-2xl font-bold">{card.value}</p>
+            ))}
+          </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="clients" className="space-y-6">
+          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h2 className="text-xl font-semibold mb-4">Recent Clients</h2>
+            <Separator.Root className="bg-gray-700 h-px w-full mb-4" />
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left border-b border-gray-700">
+                    <th className="pb-3 text-gray-400">Client ID</th>
+                    <th className="pb-3 text-gray-400">Hostname</th>
+                    <th className="pb-3 text-gray-400">IP Address</th>
+                    <th className="pb-3 text-gray-400">OS</th>
+                    <th className="pb-3 text-gray-400">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {clients?.slice(0, 5).map((client) => (
+                    <tr key={client.client_id} className="border-b border-gray-700/50">
+                      <td className="py-3 font-mono text-sm">{client.client_id}</td>
+                      <td className="py-3">{client.hostname}</td>
+                      <td className="py-3">{client.ip_address}</td>
+                      <td className="py-3">{client.os}</td>
+                      <td className="py-3">
+                        <span className="px-2 py-1 bg-green-900/40 text-green-400 rounded text-sm">
+                          Online
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                  {(!clients || clients.length === 0) && (
+                    <tr>
+                      <td colSpan={5} className="py-8 text-center text-gray-500">
+                        No clients connected
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-        ))}
-      </div>
-
-      <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-        <h2 className="text-xl font-semibold mb-4">Recent Clients</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left border-b border-gray-700">
-                <th className="pb-3 text-gray-400">Client ID</th>
-                <th className="pb-3 text-gray-400">Hostname</th>
-                <th className="pb-3 text-gray-400">IP Address</th>
-                <th className="pb-3 text-gray-400">OS</th>
-                <th className="pb-3 text-gray-400">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clients?.slice(0, 5).map((client) => (
-                <tr key={client.client_id} className="border-b border-gray-700/50">
-                  <td className="py-3 font-mono text-sm">{client.client_id}</td>
-                  <td className="py-3">{client.hostname}</td>
-                  <td className="py-3">{client.ip_address}</td>
-                  <td className="py-3">{client.os}</td>
-                  <td className="py-3">
-                    <span className="px-2 py-1 bg-green-900/40 text-green-400 rounded text-sm">
-                      Online
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {(!clients || clients.length === 0) && (
-                <tr>
-                  <td colSpan={5} className="py-8 text-center text-gray-500">
-                    No clients connected
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        </Tabs.Content>
+      </Tabs.Root>
     </div>
   );
 }

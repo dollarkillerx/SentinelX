@@ -5,15 +5,11 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 }
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  overflow: hidden;
 }
 @keyframes slide {
   from {
@@ -93,7 +89,7 @@ code {
   background: #1a1a1a;
   padding: 0.75rem;
   border-radius: 12px;
-  font: monospace;
+  font-family: monospace;
   border: 2px solid #fbf0df;
   transition: 0.3s;
   width: 100%;
@@ -158,7 +154,7 @@ code {
   border-radius: 12px;
   padding: 0.75rem;
   color: #fbf0df;
-  font: monospace;
+  font-family: monospace;
   resize: vertical;
   box-sizing: border-box;
 }
@@ -168,6 +164,111 @@ code {
 .response-area::placeholder {
   color: rgba(251, 240, 223, 0.4);
 }
+/* Radix UI Custom Styles */
+
+/* Navigation Menu */
+[data-radix-collection-item] {
+  outline: none;
+}
+
+/* Tooltip */
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[data-side="top"] {
+  animation: slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-side="right"] {
+  animation: slideLeftAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-side="bottom"] {
+  animation: slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-side="left"] {
+  animation: slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Alert Dialog */
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+[data-state="open"][data-radix-alert-dialog-overlay] {
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-state="open"][data-radix-alert-dialog-content] {
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Toggle */
+[data-state="on"] {
+  background-color: rgb(147 51 234 / var(--tw-bg-opacity));
+}
+
+/* Tabs */
+[data-state="active"][data-radix-tabs-trigger] {
+  color: white;
+  background-color: rgb(147 51 234);
+}
+
 @media (prefers-reduced-motion) {
   *,
   ::before,
